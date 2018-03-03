@@ -6,7 +6,6 @@ int main(int argc, const char * argv[])
 {
 	if (argc > 1) {
 		MACD x(argv[1]);
-		x.print();
 	}
 	return 0;
 }

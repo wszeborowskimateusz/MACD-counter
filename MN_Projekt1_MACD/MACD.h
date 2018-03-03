@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <math.h>
 
 using namespace std;
 class MACD
@@ -12,8 +13,10 @@ class MACD
 public:
 	MACD(string fileName);
 	~MACD();
-	double EMA(int N);
-
+	//Count EMA for a specific sample
+	double EMA(int N,int samleNumber);
+	//Count MACD index for all samples
+	double* MACDindex();
 	void print();
 };
 
