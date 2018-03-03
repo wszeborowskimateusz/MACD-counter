@@ -1,7 +1,6 @@
 #include "MACD.h"
 
 
-
 MACD::MACD(string fileName)
 {
 	ifstream pricesPerShareFile(fileName);
@@ -25,18 +24,35 @@ MACD::MACD(string fileName)
 	}
 
 	pricesPerShareFile.close();
-}
 
+}
 
 MACD::~MACD()
 {
 	delete[]prices;
 }
 
+void MACD::doMACD()
+{
+	if (numberOfSamples > 26) {
+		double* MACDindexArray = MACDindex();
+		double* SIGNALindexArray = SIGNAL(MACDindexArray);
+		ofstream macd("macd.txt");
+		ofstream signal("signal.txt");
+
+		for (int i = 0; i < numberOfSamples - 26 - 9; i++) {
+			macd << MACDindexArray[i + 9] << endl;
+			signal << SIGNALindexArray[i] << endl;
+		}
+
+		macd.close();
+		signal.close();
+	}
+}
 
 double MACD::EMA(int N, int samleNumber)
 {
-	EMA(N, samleNumber, prices);
+	return EMA(N, samleNumber, prices);
 }
 
 double MACD::EMA(int N, int samleNumber, double * sourcePrices)
@@ -51,27 +67,24 @@ double MACD::EMA(int N, int samleNumber, double * sourcePrices)
 	return numerator / denominator;
 }
 
-
 double * MACD::MACDindex()
 {
-	double* MACDarray = NULL;
-	if (numberOfSamples > 26) {
-		MACDarray = new double[numberOfSamples - 26];
-		int sampleCount = 26, arrayIndex = 0;
-		for (; sampleCount < numberOfSamples; sampleCount++) {
-			MACDarray[arrayIndex] = EMA(12, sampleCount) - EMA(26, sampleCount);
-		}
+	double* MACDarray = new double[numberOfSamples - 26];
+	int sampleCount = 26, arrayIndex = 0;
+	for (; sampleCount < numberOfSamples; sampleCount++,arrayIndex++) {
+		MACDarray[arrayIndex] = EMA(12, sampleCount) - EMA(26, sampleCount);
 	}
+	
 	return MACDarray;
 }
 
 double * MACD::SIGNAL(double* MACDarray)
 {
-	double* SIGNALarray = NULL;
-	SIGNALarray = new double[numberOfSamples - 26];
+	//We start from the 9th sample of MACD index, because we count EMA9
+	double* SIGNALarray = new double[numberOfSamples - 26 - 9];
 	int arrayIndex = 0;
-	for (; arrayIndex < numberOfSamples; arrayIndex++) {
-		SIGNALarray[arrayIndex] = EMA(9, arrayIndex,MACDarray);
+	for (; arrayIndex < numberOfSamples - 9 - 26; arrayIndex++) {
+		SIGNALarray[arrayIndex] = EMA(9, arrayIndex + 9, MACDarray);
 	}
 	
 	return SIGNALarray;
