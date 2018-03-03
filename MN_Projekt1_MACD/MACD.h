@@ -6,10 +6,14 @@
 using namespace std;
 class MACD
 {
-	ifstream pricesPerShare;
+	//Table to store all prices of given shares
+	double* prices;
+	int numberOfSamples = 0;
 public:
 	MACD(string fileName);
 	~MACD();
+	double EMA(int N);
+
 	void print();
 };
 

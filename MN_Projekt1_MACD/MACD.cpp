@@ -4,19 +4,38 @@
 
 MACD::MACD(string fileName)
 {
-	pricesPerShare.open(fileName);
+	ifstream pricesPerShareFile(fileName);
+
+	double x;
+	while (pricesPerShareFile >> x) {
+		++numberOfSamples;
+	}
+		
+	prices = new double[numberOfSamples];
+
+
+	//Come back to the begining of a file
+	pricesPerShareFile.clear();
+	pricesPerShareFile.seekg(0, ios::beg);
+
+
+	int i = 0;
+	while (pricesPerShareFile >> x) {
+		prices[i++] = x;
+	}
+
+	pricesPerShareFile.close();
 }
 
 
 MACD::~MACD()
 {
-	pricesPerShare.close();
+	delete[]prices;
 }
 
 void MACD::print()
 {
-	double price;
-	while (pricesPerShare >> price) {
-		cout << price << endl;
+	for (int i = 0; i < numberOfSamples; i++) {
+		cout << prices[i] << endl;
 	}
 }
