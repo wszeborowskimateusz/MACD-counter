@@ -1,6 +1,10 @@
 #include "MACD.h"
 
 
+MACD::MACD()
+{
+}
+
 MACD::MACD(string fileName)
 {
 	ifstream pricesPerShareFile(fileName);

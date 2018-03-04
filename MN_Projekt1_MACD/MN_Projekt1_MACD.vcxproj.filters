@@ -21,9 +21,15 @@
     <ClCompile Include="MACD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="earnMoney.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MACD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="earnMoney.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
